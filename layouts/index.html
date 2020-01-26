@@ -1,0 +1,111 @@
+<html lang="ja"> 
+<head>
+    <meta charset="UTF-8">
+    <title>Top</title>
+
+    <!-- UIkit CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uikit@3.3.0/dist/css/uikit.min.css" />
+
+    <!-- UIkit JS -->
+    <script src="https://cdn.jsdelivr.net/npm/uikit@3.3.0/dist/js/uikit.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/uikit@3.3.0/dist/js/uikit-icons.min.js"></script>
+
+    <script src="uikit/dist/js/uikit-icons.min.js"></script>
+</head>
+<body>
+    <nav class="uk-navbar-container uk-navbar-transparent" uk-navbar>
+        <div class="uk-navbar-left">
+            {{ $currentPage := . }}
+            {{ range .Site.Menus.main.ByWeight }}
+                <ul class="uk-navbar-nav">
+                    <li {{ if $currentPage.IsMenuCurrent "main" . }} class="uk-active" {{ end }}>
+                        <a href="{{ .URL }}">{{ .Name }}</a>
+                    </li>
+                </ul>
+            {{ end }}
+        </div>
+    </nav>
+    <section class="uk-section uk-section-muted">
+        <div class="uk-container">
+            <article class="uk-article">
+                <h1 class="uk-article-title">{{ .Site.Params.profile.name }}</h1>
+
+                <div uk-grid>
+                    <div class="uk-width-3-4@m">
+                        <h3>{{ .Site.Params.profile.handlename }}</h3>
+                        <p class="uk-article-lead">
+                            {{ .Site.Params.profile.description }}
+                        </p>
+                        {{ with .Site.Params.profile.main }}
+                        <dl>
+                            {{ range sort . }}
+                                <dt>{{ .name }}</dt>
+                                <dd>{{ .description }}</dd>
+                            {{ end }}
+                        </dl>
+                        {{ end }}
+                    </div>
+                    <div class="uk-with-auto@s">
+                        <img class="uk-border-pill" src="{{ .Site.Params.avatarurl }}" width="200" height="200" alt="avatar">
+                    </div>
+                </div>
+            </article>
+        </div>
+    </section>
+    <section class="uk-section">
+        <div class="uk-container">
+            <h2>History</h2>
+            {{ with .Site.Params.history }}
+            <div class="uk-list" uk-scrollspy="target: > div; cls: uk-animation-fade; delay: 500">
+                {{ range sort . }}
+                <div class="uk-card uk-card-default uk-card-body uk-width-3-4@m">
+                    <div class="uk-card-body">
+                        <h3 class="uk-card-title">{{ .name }}</h3>
+                        <div class="uk-width-3-4@m" uk-grid>
+                            <div>
+                                <p class="uk-text-meta">{{ .date }}</p>
+                            </div>
+                            <div>
+                                <p class="uk-text-meta">{{ .title }}</p>
+                            </div>
+                        </div>
+                        <p>{{ .description }}</p>
+                    </div>
+                </div>
+                {{ end }}
+            </div>
+            {{ end }}
+        </div>
+    </section>
+    <footer>
+        <section class="uk-section uk-section-secondary">
+            <div class="uk-container">
+                <div class="uk-flex uk-flex-center">
+                    <div>
+                        <h2>Interested in working with me?</h2>
+                        <div class="uk-flex uk-flex-center">
+                            <p><span uk-icon="icon: mail; ratio: 1"></span> {{ .Site.Params.profile.email }}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="uk-flex uk-flex-center">
+                    <div>
+                        {{ with .Site.Params.social }}
+                        <ul class="uk-iconnav">
+                            {{ range sort . }}
+                                {{ if .icon }}
+                                    <li><a href="{{ .url }}" aria-label="{{ .name }}" uk-icon="icon: {{ .icon }}; ratio: 1.5"></a></li>
+                                {{ end }}
+                            {{ end }}
+                        </ul>
+                        {{ end }}
+                    </div>
+                </div>
+                <div class="uk-flex uk-flex-center">
+                    <small>Copyright © {{ .Site.Params.year }} {{ .Site.Params.author }}, All right Reserved.</small>
+                </div>
+            </div>
+        </section>
+    </footer>
+</body>
+</html>
